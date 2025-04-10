@@ -942,7 +942,12 @@ class Warehouse(gym.Env):
         truncated = False
 
         new_obs = tuple([self._make_obs(agent) for agent in self.agents])
+        
+        # Create list indicating which agents got a NOOP action
+        noop_agents = [agent.req_action == Action.NOOP for agent in self.agents]
         info = self._get_info()
+        info["noop_agents"] = noop_agents
+        
         return new_obs, list(rewards), done, truncated, info
 
     def render(self):
